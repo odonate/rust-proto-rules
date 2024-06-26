@@ -1,0 +1,33 @@
+[Please]
+version = 17.8.7
+
+[Parse]
+preloadsubincludes = ///proto//build_defs:proto
+preloadsubincludes = ///shell//build_defs:shell
+preloadsubincludes = ///python//build_defs:python
+
+[Plugin "shell"]
+Target = //plugins:shell
+
+[Plugin "python"]
+Target = //plugins:python
+DefaultInterpreter = python3
+
+[Plugin "rust"]
+Target = //plugins:rust
+Rustc = //third_party/rust:toolchain_rustc
+
+[Plugin "proto"]
+Target = //plugins:proto
+ProtocTool = //third_party/proto:protoc
+LanguageDef = //build_defs:rust_proto
+
+[Plugin "rust_proto"]
+ProtoPlugin = //third_party/rust:protoc-gen-prost
+
+[PluginDefinition]
+Name = rust_proto
+
+[PluginConfig "plugin"]
+ConfigKey = ProtoPlugin
+DefaultValue = grpc_rust_plugin
