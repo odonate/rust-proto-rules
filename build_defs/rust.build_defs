@@ -21,25 +21,22 @@ def rust_proto_library(name:str, srcs:list, deps:list=[], visibility:list=None, 
     if additional_context:
         fail("additional_context is not used in this rule")
 
-    deps += [
-        # "//third_party/rust:prost",
-    ]
+    deps += [CONFIG.RUST_PROTO.PROTO_DEP]
     protoc = protoc_rule(
         name = name,
         srcs = srcs,
         language = "rust",
-        tools = {"rust": ["//third_party/rust:protoc_gen_prost"]},
+        tools = {"rust": [CONFIG.RUST_PROTO.PLUGIN]},
         protoc_flags = protoc_flags,
         plugin_flags = [
             '--plugin=protoc-gen-prost="`which $TOOLS_RUST`"',
             '--prost_out="$OUT_DIR"',
         ],
-        labels = labels, # ?
+        labels = labels,
         test_only = test_only,
         root_dir = root_dir,
         deps = deps,
         visibility = visibility,
-        # pre_build = _rust_path_mapping(),
     )
     return filegroup(
         name = f"_{name}#rust",
@@ -70,16 +67,16 @@ def rust_grpc_library(name:str, srcs:list, deps:list=[], visibility:list=None, l
         fail("additional_context is not used in this rule")
 
     deps += [
-        "//third_party/rust:prost",
-        "//third_party/rust:tonic",
+        CONFIG.RUST_PROTO.PROTO_DEP,
+        CONFIG.RUST_PROTO.GRPC_DEP,
     ]
     protoc = protoc_rule(
         name = name,
         srcs = srcs,
         language = "rust",
         tools = {
-            "rust": ["//third_party/rust:protoc_gen_prost"],
-            "grpc_rust": ["//third_party/rust:protoc_gen_tonic"],
+            "rust": [CONFIG.RUST_PROTO.PLUGIN],
+            "grpc_rust": [CONFIG.RUST_PROTO.GRPC_PLUGIN],
         },
         protoc_flags = protoc_flags,
         plugin_flags = [
