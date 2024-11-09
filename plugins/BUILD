@@ -6,7 +6,7 @@ plugin_repo(
 plugin_repo(
     name = "rust",
     owner = "odonate",
-    revision = "1d9361eb7deb52491bcfa803adb15b4019519212",
+    revision = "115fac986f9decd866ee122a3a02437443c16f4d",
 )
 
 plugin_repo(
