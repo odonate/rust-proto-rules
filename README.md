@@ -44,7 +44,6 @@ path/to/your/package/
     ├── lib.rs || main.rs
     └── proto
         ├── BUILD
-        ├── mod.rs
         └── service.proto
 ```
 
@@ -54,6 +53,9 @@ You can then use `proto_library()` or `grpc_library()` to generate Rust code for
 grpc_library(
     name = "proto",
     srcs = ["service.proto"],
+    languages = {
+        "rust": rust_grpc_language(),
+    },
     visibility = ["PUBLIC"],
     deps = [
         "//third_party/rust:prost",
@@ -61,24 +63,9 @@ grpc_library(
     ],
 )
 
-export_file(
-    name = "mod",
-    src = "mod.rs",
-    visibility = ["PUBLIC"],
-)
 ```
 
-You must define a `mod.rs` module to expose the generated proto files:
-```rust
-pub mod your_proto_package {
-    include!("your.proto.package.rs");
-}
-
-pub mod your_proto_package_tonic {
-    include!("your.proto.package.rs");
-    include!("your.proto.package.tonic.rs");
-}
-```
+And you can use the `protoc` generated `service.rs` and `service.tonic.rs` in your Rust code:
 
 ```python
 rust_binary(
@@ -87,7 +74,6 @@ rust_binary(
     root = "src/main.rs",
     deps = [
         "//path/to/your/package/src/proto:_proto#rust",
-        "//path/to/your/package/src/proto:mod",
         "//third_party/rust:prost",
         "//third_party/rust:tonic",
     ],
