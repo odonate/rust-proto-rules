@@ -9,3 +9,8 @@ proto_build_defs(
     },
     visibility = ["PUBLIC"],
 )
+
+export_file(
+    name = "utils",
+    src = "utils.build_defs",
+)
