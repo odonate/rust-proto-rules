@@ -1,6 +1,13 @@
 """Build rules for comiling protocol buffers & gRPC service stubs.
 """
 subinclude("///proto//build_defs/sdk", "///rust//build_defs:rust")
+subinclude("//build_defs:utils")
+
+_rust_proto_root = """
+pub mod __MODULE__ {
+    __INCLUDES__
+}
+"""
 
 def rust_proto_library(name:str, srcs:list, deps:list=[], visibility:list=None, labels:list&features&tags=[],
                        test_only:bool&testonly=False, root_dir:str='', protoc_flags:list=[], additional_context:dict=None):
@@ -38,14 +45,34 @@ def rust_proto_library(name:str, srcs:list, deps:list=[], visibility:list=None, 
         deps = deps,
         visibility = visibility,
     )
-    return filegroup(
-        name = f"_{name}#rust",
-        srcs = [protoc],
-        deps = deps,
-        test_only = test_only,
-        labels = labels,
-        visibility = visibility,
+    includes = []
+    for src in srcs:
+        p = src.split(".")[0]
+        includes.append(f'include!("{p}.rs");')
+    rust_proto_root = text_file(
+        name = f'_{name}#mod.rs',
+        filename = 'mod.rs',
+        content = _rust_proto_root,
+        replace = {
+            '__MODULE__': name,
+            '__INCLUDES__': '\\t\\n'.join(includes),
+        },
     )
+    return rust_library(
+        name = f'_{name}#rust',
+        root = rust_proto_root,
+        crate_name = name,
+        modules = [protoc],
+        deps = deps,
+        edition = "2021",
+    )
+
+
+_rust_grpc_root = """
+pub mod __MODULE__ {
+    __INCLUDES__
+}
+"""
 
 def rust_grpc_library(name:str, srcs:list, deps:list=[], visibility:list=None, labels:list&features&tags=[],
                       test_only:bool&testonly=False, root_dir:str='', protoc_flags:list=[], additional_context:dict=None):
@@ -92,13 +119,28 @@ def rust_grpc_library(name:str, srcs:list, deps:list=[], visibility:list=None, l
         deps = deps,
         visibility = visibility,
     )
-    return filegroup(
+    
+    includes = []
+    for src in srcs:
+        p = src.split(".")[0]
+        includes.append(f'include!("{p}.rs");')
+        includes.append(f'include!("{p}.tonic.rs");')
+    rust_grpc_root = text_file(
+        name = f'_{name}#mod_rs',
+        filename = 'mod.rs',
+        content = _rust_grpc_root,
+        replace = {
+            '__MODULE__': name,
+            '__INCLUDES__': '\\t\\n'.join(includes),
+        },
+    )
+    return rust_library(
         name = f'_{name}#rust',
-        srcs = [protoc],
+        root = rust_grpc_root,
+        crate_name=name,
+        modules = [protoc],
         deps = deps,
-        labels = labels,
-        test_only = test_only,
-        visibility = visibility,
+        edition = "2021",
     )
 
 def rust_proto_language():
