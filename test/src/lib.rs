@@ -1,17 +1,16 @@
-pub mod proto;
 
 #[cfg(test)]
 mod tests {
-    use crate::proto::test_proto;
+    use proto;
 
     #[test]
     fn test_proto_imports() {
-        let request = test_proto::HelloRequest {
+        let request = proto::proto::HelloRequest {
             id: String::from("test_id"),
             person: String::from("test_person"),
         };
 
-        let response = test_proto::HelloResponse {
+        let response = proto::proto::HelloResponse {
             id: String::from("response_id"),
             greeting: String::from("Hello"),
         };
@@ -20,7 +19,7 @@ mod tests {
     }
 
     
-    use crate::proto::test_proto_tonic::{
+    use proto::proto::{
         hello_service_server::{
             HelloServiceServer,
             HelloService,

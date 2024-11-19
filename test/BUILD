@@ -4,7 +4,6 @@ rust_test(
     name = "service_test",
     root = "src/lib.rs",
     deps = [
-        "//test/src/proto:mod",
         "//test/src/proto:_proto#rust",
         "//third_party/rust:tonic",
         "//third_party/rust:prost",

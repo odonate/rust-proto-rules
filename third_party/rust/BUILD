@@ -20,17 +20,17 @@ rust_crate(
     download = ":protoc_gen_tonic_dl",
     version = "0.4.0",
     features = [],
-    deps = {
-        "heck": ":heck",
-        "prettyplease": ":prettyplease",
-        "prost_build": ":prost_build",
-        "prost_types": ":prost_types",
-        "prost": ":prost",
-        "protoc_gen_prost": ":protoc_gen_prost_lib",
-        "regex": ":regex",
-        "syn": ":syn",
-        "tonic_build": ":tonic_build",
-    },
+    deps = [
+        ":heck",
+        ":prettyplease",
+        ":prost_build",
+        ":prost_types",
+        ":prost",
+        ":protoc_gen_prost_lib",
+        ":regex",
+        ":syn",
+        ":tonic_build",
+    ],
 )
 
 rust_crate(
@@ -42,14 +42,11 @@ rust_crate(
     features = [],
     crate_type = 'bin',
     src_root = 'src/main.rs',
-    deps = {
-        "prost": ":prost",
-        "protoc_gen_prost": ":protoc_gen_prost_lib",
-        "protoc_gen_tonic": ":protoc_gen_tonic_lib",
-    },
-    compile_env = {
-        "CARGO_PKG_VERSION": "0.1.0",
-    },
+    deps = [
+        ":prost",
+        ":protoc_gen_prost_lib",
+        ":protoc_gen_tonic_lib",
+    ],
 )
 
 rust_crate(
@@ -83,13 +80,13 @@ rust_crate(
     download = ":protoc_gen_prost_dl",
     version = "0.3.1",
     features = [],
-    deps = {
-        "once_cell": ":once_cell",
-        "prost": ":prost",
-        "prost_build": ":prost_build",
-        "prost_types": ":prost_types",
-        "regex": ":regex",
-    },
+    deps = [
+        ":once_cell",
+        ":prost",
+        ":prost_build",
+        ":prost_types",
+        ":regex",
+    ],
 )
 
 rust_crate(
@@ -101,13 +98,10 @@ rust_crate(
     features = [],
     crate_type = 'bin',
     src_root = 'src/main.rs',
-    deps = {
-        "prost": ":prost",
-        "protoc_gen_prost": ":protoc_gen_prost_lib",
-    },
-    compile_env = {
-        "CARGO_PKG_VERSION": "0.1.0",
-    },
+    deps = [
+        ":prost",
+        ":protoc_gen_prost_lib",
+    ],
 )
 
 rust_crate(
@@ -350,9 +344,6 @@ rust_crate(
     version = "0.2.20",
     edition = "2021",
     build_root = "build.rs",
-    build_compile_env = {
-        "CARGO_PKG_VERSION": "0.1.0",
-    },
     deps = [
         ":proc_macro2",
         ":syn",
@@ -459,23 +450,15 @@ rust_crate(
         "std",
         "use-libc-auxv",
     ],
-    deps = {
-        "bitflags": ":bitflags",
-        "linux_raw_sys": ":linux_raw_sys",
-        "libc": ":libc",
+    deps = [
+        ":bitflags",
+        ":linux_raw_sys",
+        ":libc",
+    ],
+    renamed_deps = {
         "libc_errno": ":errno", # renamed
     },
     build_root = "build.rs",
-    build_run_env = {
-        # Found from <cargo_out_dir>.rustc_info.json
-        "CARGO_CFG_TARGET_ARCH": "x86_64",
-        "CARGO_CFG_TARGET_ENV": "gnu",
-        "CARGO_CFG_TARGET_OS": "linux",
-        "CARGO_CFG_TARGET_POINTER_WIDTH": "64",
-        "CARGO_CFG_TARGET_ENDIAN": "little",
-        "RUSTC": CONFIG.RUST.RUSTC,
-        "TARGET": "x86_64-unknown-linux-gnu",
-    },
     build_deps = [
         ":libc",
     ],
@@ -558,9 +541,6 @@ rust_crate(
         ":tower_service",
         ":tracing",
     ],
-    compile_env = {
-        "CARGO_PKG_VERSION": "0.1.0",
-    },
 )
 
 rust_crate(
@@ -662,27 +642,27 @@ rust_crate(
     version = "0.6.20",
     edition = "2021",
     crate_type = "lib",
-    deps = {
-        "async_trait": ":async_trait",
-        "axum_core": ":axum_core",
-        "bitflags": ":bitflags.1.3.2",
-        "bytes": ":bytes",
-        "futures_util": ":futures_util",
-        "http": ":http",
-        "http_body": ":http_body",
-        "hyper": ":hyper",
-        "itoa": ":itoa",
-        "matchit": ":matchit",
-        "memchr": ":memchr",
-        "mime": ":mime",
-        "percent_encoding": ":percent_encoding",
-        "pin_project_lite": ":pin_project_lite",
-        "serde": ":serde",
-        "sync_wrapper": ":sync_wrapper",
-        "tower": ":tower",
-        "tower_layer": ":tower_layer",
-        "tower_service": ":tower_service",
-    },
+    deps = [
+        ":async_trait",
+        ":axum_core",
+        ":bitflags.1.3.2",
+        ":bytes",
+        ":futures_util",
+        ":http",
+        ":http_body",
+        ":hyper",
+        ":itoa",
+        ":matchit",
+        ":memchr",
+        ":mime",
+        ":percent_encoding",
+        ":pin_project_lite",
+        ":serde",
+        ":sync_wrapper",
+        ":tower",
+        ":tower_layer",
+        ":tower_service",
+    ],
     build_root = "build.rs",
     build_deps = [
         ":rustversion",
@@ -696,10 +676,6 @@ rust_crate(
     edition = "2018",
     crate_type = 'proc-macro',
     build_root = "build/build.rs",
-    compile_env = {
-        # TODO: absolute path would be better.
-        'OUT_DIR': '../../target/debug/build/rustversion_1_0_17/out',
-    },
 )
 
 rust_crate(
@@ -1283,22 +1259,22 @@ rust_crate(
         "limit", "load", "make", "pin-project", "pin-project-lite", "rand", "ready-cache", "slab",
         "timeout", "tokio", "tokio-util", "tracing", "util",
     ],
-    deps = {
-        "futures_core": ":futures_core",
-        "futures_util": ":futures_util",
+    deps = [
+        ":futures_core",
+        ":futures_util",
         # https://github.com/indexmap-rs/indexmap/issues/289
         #"indexmap": ":indexmap.1.9.3",
-        "indexmap": ":indexmap.1.2.0",
-        "pin_project": ":pin_project",
-        "pin_project_lite": ":pin_project_lite",
-        "rand": ":rand",
-        "slab": ":slab",
-        "tokio": ":tokio",
-        "tokio_util": ":tokio_util",
-        "tower_layer": ":tower_layer",
-        "tower_service": ":tower_service",
-        "tracing": ":tracing",
-    },
+        ":indexmap.1.2.0",
+        ":pin_project",
+        ":pin_project_lite",
+        ":rand",
+        ":slab",
+        ":tokio",
+        ":tokio_util",
+        ":tower_layer",
+        ":tower_service",
+        ":tracing",
+    ],
 )
 
 rust_crate(
@@ -1404,9 +1380,6 @@ rust_crate(
         "std",
     ],
     build_root = "build.rs",
-    build_run_env = {
-        "TARGET": "x86_64-unknown-linux-gnu",
-    },
 )
 
 rust_crate(
